@@ -15,4 +15,7 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('admin.home');
 
     $router->resource('users', UserController::class);
+    $router->resource('posts', PostController::class);
+    $router->resource('movies', MovieController::class);
+    $router->resource('directors', DirectorController::class);
 });

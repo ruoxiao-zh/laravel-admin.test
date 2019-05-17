@@ -9,6 +9,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use Encore\Admin\Widgets\Box;
 use Encore\Admin\Widgets\Table;
 
 class UserController extends Controller
@@ -51,6 +52,15 @@ class UserController extends Controller
     {
         $grid = new Grid(new User);
 
+//        $grid->header(function ($query) {
+//            $sex = $query->select(\DB::raw('count(sex) as count, sex'))
+//                ->groupBy('sex')->get()->pluck('count', 'sex')->toArray();
+//
+//            $doughnut = view('admin.chart.gender', compact('sex'));
+//
+//            return new Box('Sex Ratio', $doughnut);
+//        });
+
         $grid->id('Id')->sortable();    // 第一列显示id字段，并将这一列设置为可排序列
         $grid->name('Name')->display(function ($name) {
             return "<span style='color:green;'>$name</span>";
@@ -83,7 +93,8 @@ class UserController extends Controller
 
         // filter($callback)方法用来设置表格的简单搜索框
         $grid->filter(function ($filter) {
-            // $filter->equal('sex', $this->input);
+            $filter->like('name', 'Name');
+            $filter->equal('sex')->select(['0' => '女', '1' => '男']);
             // 设置created_at字段的范围查询
             $filter->between('created_at', 'Created Time')->datetime();
         });
@@ -94,6 +105,7 @@ class UserController extends Controller
         });
 
         $grid->model()->orderBy('id', 'desc');
+
         $grid->paginate(15);
 
         return $grid;
@@ -127,6 +139,7 @@ class UserController extends Controller
 
         $form->text('name', 'Name');
         $form->email('email', 'Email');
+        $form->image('avatar', 'Avatar')->uniqueName();
         $form->datetime('email_verified_at', 'Email verified at')->default(date('Y-m-d H:i:s'));
         $form->password('password', 'Password');
         $form->text('remember_token', 'Remember token');
