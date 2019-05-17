@@ -137,7 +137,12 @@ class UserController extends Controller
     {
         $form = new Form(new User);
 
-        $form->text('name', 'Name');
+        $form->text('name', 'Name')->rules('required|min:10');
+        $form->select('sex', 'Sex')->options([0 => 'female', 1 => 'male']);
+        $form->multipleSelect('hobby', 'Hobby')->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+        $form->listbox('color', 'Color')->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+        $form->color('yellow', 'Yellow')->default('#ccc');
+
         $form->email('email', 'Email');
         $form->image('avatar', 'Avatar')->uniqueName();
         $form->datetime('email_verified_at', 'Email verified at')->default(date('Y-m-d H:i:s'));
